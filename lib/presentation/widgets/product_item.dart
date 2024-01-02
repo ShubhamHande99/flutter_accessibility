@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:project/core/utils/semantics_hints.dart';
 import 'package:project/core/utils/utils.dart';
 import 'package:project/domain/models/models.dart';
 
@@ -16,49 +18,99 @@ class ProductItem extends StatefulWidget {
 
 class _ProductItemState extends State<ProductItem> {
   bool _isFav = false;
+
+  void _showAddedToCartMessage() {
+    debugPrint('c');
+    const snackBar = SnackBar(
+      content: Text('Product successfully added to the cart.'),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void _showAddedToFavMessage() {
+    const snackBar = SnackBar(
+      content: Text('Product successfully added to the favourite.'),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void _showRemovedFromFavMessage() {
+    const snackBar = SnackBar(
+      content: Text('Product successfully removed from the favourite.'),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void _addOrRemoveFromFav() {
+    _isFav = !_isFav;
+    setState(() {});
+
+    if (_isFav) {
+      _showAddedToFavMessage();
+    } else {
+      _showRemovedFromFavMessage();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(8.0),
-        border: Border.all(color: AppColors.gray),
-      ),
-      width: AppSizes.size_155w,
-      child: Stack(
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              _topView(),
-              const SizedBox(height: 8.0),
-              _colors(),
-              _bottomView(),
-            ],
-          ),
-          Positioned(
-            top: 0,
-            right: 0,
-            child: IconButton(
-              icon:  Icon(
-                _isFav ? Icons.favorite :  Icons.favorite_border_outlined,
-                size: 16,
-                color: _isFav ? Colors.red : Colors.grey,
-              ),
-              onPressed: () {
-                _isFav = !_isFav;
-                setState(() {});
-              },
+    return Semantics(
+      button: true,
+      onTap: () {},
+      sortKey: const OrdinalSortKey(0),
+      label: SemanticsLabels.product,
+      onTapHint: SemanticsHints.viewProductOnTapHint,
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(8.0),
+          border: Border.all(color: AppColors.gray),
+        ),
+        width: AppSizes.size_155w,
+        child: Stack(
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                _topView(),
+                const SizedBox(height: 8.0),
+                _colors(),
+                _bottomView(),
+              ],
             ),
-          ),
-        ],
+            Positioned(
+              top: 0,
+              right: 0,
+              child: Semantics(
+                button: true,
+                label: _isFav
+                    ? SemanticsLabels.removeFromFav(widget.product.title)
+                    : SemanticsLabels.addToFav(widget.product.title),
+                onTap: () {
+                  _addOrRemoveFromFav();
+                },
+                child: ExcludeSemantics(
+                  child: IconButton(
+                    icon: Icon(
+                      _isFav ? Icons.favorite : Icons.favorite_border_outlined,
+                      size: 16,
+                      color: _isFav ? Colors.red : Colors.grey,
+                    ),
+                    onPressed: () {
+                      _addOrRemoveFromFav();
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _topView() {
     return Container(
-
       padding: const EdgeInsets.only(top: 24.0),
       width: double.infinity,
       child: Image.asset(
@@ -67,6 +119,7 @@ class _ProductItemState extends State<ProductItem> {
         height: AppSizes.size_130h,
         fit: BoxFit.contain,
         filterQuality: FilterQuality.high,
+        excludeFromSemantics: true,
       ),
     );
   }
@@ -114,16 +167,23 @@ class _ProductItemState extends State<ProductItem> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              CircleAvatar(
-
-                radius: 12.0,
-                backgroundColor: AppColors.primary,
-                child: Icon(
-                  Icons.add,
-                  color: AppColors.white,
-                  size: 14.0,
+              Semantics(
+                button: true,
+                label: SemanticsLabels.addToCart(widget.product.title),
+                onTap: () {
+                  _showAddedToCartMessage();
+                },
+                child: CircleAvatar(
+                  radius: 12.0,
+                  backgroundColor: AppColors.primary,
+                  child: ExcludeSemantics(
+                    child: Icon(
+                      Icons.add,
+                      color: AppColors.white,
+                      size: 14.0,
+                    ),
+                  ),
                 ),
-
               ),
             ],
           ),

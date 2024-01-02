@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:project/core/utils/app_sizes.dart';
-import 'package:project/core/utils/app_text_style.dart';
+import 'package:project/core/utils/semantics_hints.dart';
+
+import '../../core/utils/utils.dart';
 
 class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -34,15 +35,29 @@ class AppAppBar extends StatelessWidget implements PreferredSizeWidget {
                       padding: EdgeInsets.symmetric(
                         horizontal: AppSizes.size_24w,
                       ),
-                      child: Text(
-                        title,
-                        style: AppTextStyle.headlineMedium(context),
+                      child: Semantics(
+                        header: true,
+                        child: Text(
+                          title,
+                          style: AppTextStyle.headlineMedium(context),
+                        ),
                       ),
                     ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.settings),
-                    onPressed: () {},
+                  Semantics(
+                    button: true,
+                    onTap: () {},
+                    label: SemanticsLabels.settingsIcon,
+                    onTapHint: SemanticsHints.showSettingsOnTapHint,
+                    child: ExcludeSemantics(
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.settings,
+                        ),
+                        onPressed: () {},
+                        tooltip: TooltipMessages.settings,
+                      ),
+                    ),
                   )
                 ],
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project/core/mock_data/mock_data.dart';
 import 'package:project/core/utils/app_sizes.dart';
+import 'package:project/core/utils/sematics_labels.dart';
 
 import '../widgets/widgets.dart';
 
@@ -46,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
               setState(() {});
             },
             tooltip: 'All',
+            semanticsLabel: SemanticsLabels.allTextButton,
           ),
           ProductCategoriesItem(
             index: 1,
@@ -56,6 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
               setState(() {});
             },
             tooltip: 'Sofa',
+            semanticsLabel: SemanticsLabels.sofaIcon,
           ),
           ProductCategoriesItem(
             index: 2,
@@ -66,6 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
               setState(() {});
             },
             tooltip: 'Table',
+            semanticsLabel: SemanticsLabels.tableIcon,
           ),
           ProductCategoriesItem(
             index: 3,
@@ -76,6 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
               setState(() {});
             },
             tooltip: 'Lamp',
+            semanticsLabel: SemanticsLabels.lampIcon,
           ),
         ],
       ),
@@ -86,6 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return SizedBox(
       width: double.infinity,
       child: Wrap(
+
         alignment: WrapAlignment.spaceBetween,
         runSpacing: AppSizes.size_16h,
         children: productList

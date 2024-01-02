@@ -23,12 +23,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
       setMediaQueryData(context);
+      final textScaler = mediaQueryData.textScaler.clamp(
+        minScaleFactor: 1.0,
+        maxScaleFactor: 1.2,
+      );
 
-      return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Accessibility',
-        theme: LightTheme.lightTheme,
-        home: const HomeScreen(),
+      return MediaQuery(
+        data: mediaQueryData.copyWith(
+          textScaler: textScaler,
+        ),
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Accessibility',
+          theme: LightTheme.lightTheme,
+          home: const HomeScreen(),
+        ),
       );
     });
   }
