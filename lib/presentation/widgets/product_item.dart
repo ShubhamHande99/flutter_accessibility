@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:project/core/utils/app_sizes.dart';
 import 'package:project/core/utils/utils.dart';
 import 'package:project/domain/models/models.dart';
 
